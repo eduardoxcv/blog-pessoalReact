@@ -1,7 +1,7 @@
-import React from "react"
-
-
+import React from 'react';
 import { AppBar, Toolbar, Typography, Box } from '@material-ui/core';
+import { Link } from 'react-router-dom';
+import './Navbar.css'
 function Navbar() {
     return (
         <>
@@ -9,36 +9,39 @@ function Navbar() {
                 <Toolbar variant="dense">
                     <Box style={{ cursor: "pointer" }} >
                         <Typography variant="h5" color="inherit">
-                            Blog Pessoal
+                            BlogPessoal
                         </Typography>
                     </Box>
 
                     <Box display="flex" justifyContent="start">
-                        <Box mx={1} style={{ cursor: "pointer" }}>
+                        <Box mx={1} className= "cursor">
                             <Typography variant="h6" color="inherit">
-                                Home
+                                home
                             </Typography>
                         </Box>
-                        <Box mx={1} style={{ cursor: "pointer" }}>
+                        <Box mx={1} className= "cursor">
                             <Typography variant="h6" color="inherit">
-                                Postagens
+                                postagens
                             </Typography>
                         </Box>
-                        <Box mx={1} style={{ cursor: "pointer" }}>
+                        <Box mx={1} className= "cursor">
                             <Typography variant="h6" color="inherit">
-                                Temas
+                                temas
                             </Typography>
                         </Box>
-                        <Box mx={1} style={{ cursor: "pointer" }}>
+                        <Box mx={1} className= "cursor">
                             <Typography variant="h6" color="inherit">
-                                Cadastrar Temas
+                                cadastrar tema
                             </Typography>
                         </Box>
-                        <Box mx={1} style={{ cursor: "pointer" }}>
-                            <Typography variant="h6" color="inherit">
-                                Logout (sair)
-                            </Typography>
-                        </Box>
+                        <Link to='/login' className='text-decorator-none'>
+                            <Box mx={1} className= "cursor">
+                                <Typography variant="h6" color="inherit">
+                                    logout
+                                </Typography>
+                            </Box>
+                        </Link>
+                        
                     </Box>
 
                 </Toolbar>
@@ -46,6 +49,5 @@ function Navbar() {
         </>
     )
 }
-
 
 export default Navbar;
