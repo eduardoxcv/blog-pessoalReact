@@ -13,3 +13,8 @@ export const api = axios.create({
       setDado(resposta.data.token) /*SERVICE RESPONSAVEL PELO LOGIN*/
       
     }
+    export const busca = async(url: any,setDado: any, header: any) => { 
+      const resposta = await api.get(url,header) // AQUI ESTAMOS PASSANDO A URL + TOKEN (SÓ VAI PODER LISTAR AS POSTAGENS SE ESTIVER LOGADO)
+      setDado(resposta.data) /* SERVICE RESPONSAVEL POR BUSCAR OS TEMAS E POSTAGENS*/
+  }
+  
