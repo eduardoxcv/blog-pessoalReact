@@ -8,3 +8,9 @@
     text-decoration: none;
 
 }
+.logotipo{
+    width: 80px;
+    height: 80px;
+    margin-top: 2em;
+    border-radius: 50%;
+}

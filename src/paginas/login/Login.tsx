@@ -1,14 +1,16 @@
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import { Grid, Box, Typography, TextField, Button } from '@material-ui/core';
 import { Link, useHistory } from 'react-router-dom';
-import useLocalStorage from 'react-use-localstorage';
 import { login } from '../../services/Service';
 import UserLogin from '../../models/UserLogin';
 import './Login.css';
+import { useDispatch } from 'react-redux';
+import { addToken } from "../../store/tokens/actions";
 
 function Login() {
     let history = useHistory();
-    const [token, setToken] = useLocalStorage('token'); /*Essa const vai fazer o controle do token*/
+    const dispatch = useDispatch();
+    const [token, setToken] = useState(''); /*Essa const vai fazer o controle do token*/
     const [userLogin, setUserLogin] = useState<UserLogin>( /* userLogin = estado do componente //  setUserLogin=  pode alterar estado do componente*/
         {
             id: 0,
@@ -29,6 +31,7 @@ function Login() {
 
     useEffect(() => { /* aqui o usuario é direcionado a pg home caso seja logado com sucesso*/
         if (token != '') {
+            dispatch(addToken(token));
             history.push('/home')
         }
     }, [token])

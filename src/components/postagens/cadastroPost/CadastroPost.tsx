@@ -33,10 +33,10 @@ function CadastroPost() {
         tema: null
     })
 
-    useEffect(() => { // AQUI 
+    useEffect(() => { // ESSE useEffect SERVE PARA ALTERAR O TEMA... ELE JUNTA TODAS AS POSTAGENS DE DETERMINADO TEMA 
         setPostagem({
-            ...postagem,
-            tema: tema
+            ...postagem,// E TROCA PELO NOVO TEMA.. 
+            tema: tema // PRIMEIRO TEMA: TEMA ANTIGO / SEGUNDO TEMA: NOVO TEMA QUE VAI SOFRER ALTERAÇÃO
         })
     }, [tema])
 
