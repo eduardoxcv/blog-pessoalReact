@@ -6,6 +6,7 @@ import UserLogin from '../../models/UserLogin';
 import './Login.css';
 import { useDispatch } from 'react-redux';
 import { addToken } from "../../store/tokens/actions";
+import { toast } from 'react-toastify';
 
 function Login() {
     let history = useHistory();
@@ -36,17 +37,34 @@ function Login() {
         }
     }, [token])
 
-    async function onSubmit(e: ChangeEvent<HTMLFormElement>) {
-        e.preventDefault(); /* preventDefault = previne o comportamento padrão do botão //Não vai permitir que o botão atualize a tela*/
-        try { /*Try Catch = tentativa de execução e caso não dê certo um erro é retornado. */
-            await login(`/usuarios/logar`, userLogin, setToken) /* aqui vamos para rota de tentativa de login do backend*/
-
-
-            alert('Usuário logado com sucesso!');
-        } catch (error) { /* aqui o erro é relatado caso der ERRO */
-            alert('Dados do usuário inconsistentes. Erro ao logar!');
+    async function onSubmit(e: ChangeEvent<HTMLFormElement>){
+        e.preventDefault();
+        try{
+            await login(`/usuarios/logar`, userLogin, setToken)
+            toast.success('Usuário logado com sucesso!', {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: false,
+                theme: "colored",
+                progress: undefined,
+                });
+        }catch(error){
+            toast.error('Dados do usuário inconsistentes. Erro ao logar!', {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: false,
+                theme: "colored",
+                progress: undefined,
+                });
         }
     }
+
 
     return (
         <Grid container direction='row' justifyContent='center' alignItems='center'>

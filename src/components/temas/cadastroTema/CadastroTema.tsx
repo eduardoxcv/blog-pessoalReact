@@ -2,25 +2,37 @@ import React, {useState, useEffect, ChangeEvent} from 'react'
 import { Container, Typography, TextField, Button } from "@material-ui/core"
 import {useHistory, useParams } from 'react-router-dom'
 import './CadastroTema.css';
-import useLocalStorage from 'react-use-localstorage';
 import Tema from '../../../models/Tema';
 import { buscaId, post, put } from '../../../services/Service';
-
+import { useSelector } from 'react-redux';
+import { TokenState } from '../../../store/tokens/tokensReducer';
+import { toast } from 'react-toastify';
 
 function CadastroTema() {
 
     let history = useHistory(); // UTILIZADO PARA FAZER O REDIRECIONAMENTO DE PAGINAS 
     const { id } = useParams<{id: string}>(); // useParams = SERVE PARA CAPTURAR OS PARAMETROS DE UMA URL, ELE VAI CAPTURAR O ID QUANDO FOI ATUALIZAR UM TEMA POR EX
-    const [token, setToken] = useLocalStorage('token'); // useLocalStorage = SERVE PARA CAPTURAR O TOKEN ARMAZENADO NO NAVEGADOR E GUARDAR
+    const token = useSelector<TokenState, TokenState["tokens"]>( // useLocalStorage = SERVE PARA CAPTURAR O TOKEN ARMAZENADO NO NAVEGADOR E GUARDAR
+    (state) => state.tokens
+    );
     const [tema, setTema] = useState<Tema>({
         id: 0,
         descricao: ''
     })
 
-    useEffect(() => { // useEffect = SERVE PARA VER O CICLO DE VIDA 
-        if (token == "") { // ENTÃO SE O TOKEN ESTIVER VAZIO ELE PRECISA RETORNAR 
-            alert("Você precisa estar logado") // ESSE ALERTA
-            history.push("/login") // E DIRECIONAR PARA PAGINA DE LOGIN 
+    useEffect(() => { // mensagem de erro com o card verde
+        if (token == "") {
+            toast.error('Você precisa estar logado', {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: false,
+                theme: "colored",
+                progress: undefined,
+                });
+            history.push("/login")
     
         }
     }, [token])
@@ -52,42 +64,59 @@ function CadastroTema() {
             e.preventDefault()
             console.log("tema " + JSON.stringify(tema))
     
-            if (id !== undefined) {                    //ESSE IF SIGNIFICA QUE CASO O USUARIO QYEURA ALTERAR UM ID EXISTENTE ELE VAI CAR NESSE IF
+            if (id !== undefined) {
                 console.log(tema)
-                put(`/tema`, tema, setTema, {         // CAINDO NO IF ELE VAI PRA ROTA PUT QUE É ALTERAR 
+                put(`/tema`, tema, setTema, {
                     headers: {
-                        'Authorization': token       // APOS ISSO ELE CAI NO TOKEN PARA VER SE O USUARIO TEM AUTORIZAÇÃO - CASO POSITIVO ALTERA
+                        'Authorization': token
                     }
                 })
-                alert('Tema atualizado com sucesso'); // ALERTA DE SUCESSO 
-            } else {                                   // ESSE ELSE SIGINIFICA QUE CASO O USUARIO PASSE UM ID QUE NÃO EXISTE ELE VAI CAIR AQUI 
-                post(`/tema`, tema, setTema, {         // CAINDO NO ELSE ELE VAI PRA ROTA POST QUE É CRIAR UM TEMA   
+                toast.success('Tema atualizado com sucesso', {
+                    position: "top-right",
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: false,
+                    theme: "colored",
+                    progress: undefined,
+                    });
+            } else {
+                post(`/tema`, tema, setTema, {
                     headers: {
-                        'Authorization': token         // APOS ISSO ELE VAI NO TOKEN E AUTENTICA A POSTAGEM,
+                        'Authorization': token
                     }
                 })
-                alert('Tema cadastrado com sucesso'); // ALERTA DE SUCESSO
+                toast.success('Tema cadastrado com sucesso', {
+                    position: "top-right",
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: false,
+                    theme: "colored",
+                    progress: undefined,
+                    });
             }
             back()
     
         }
     
         function back() {
-            history.push('/temas') // APÓS TODO O PROCESSO DE CIMA TANTO DE ATUALIZAÇÃO QUANTO DE POSTAGEM 
-        }                          // O USUARIO É DIRECIONADO PARA A PAGINA TEMAS ONDE TEM A LISTA 
-
+            history.push('/temas')
+        }
   
-        return (
-            <Container maxWidth="sm" className="topo">
-                <form onSubmit={onSubmit}>
-                    <Typography variant="h3" color="textSecondary" component="h1" align="center" >Formulário de cadastro tema</Typography>
-                    <TextField value={tema.descricao} onChange={(e: ChangeEvent<HTMLInputElement>) => updatedTema(e)} id="descricao" label="descricao" variant="outlined" name="descricao" margin="normal" fullWidth />
-                    <Button type="submit" variant="contained" color="primary">
-                        Finalizar
-                    </Button>
-                </form>
-            </Container>
-        )
-    }
-    
-    export default CadastroTema;
+    return (
+        <Container maxWidth="sm" className="topo">
+            <form onSubmit={onSubmit}>
+                <Typography variant="h3" color="textSecondary" component="h1" align="center" >Formulário de cadastro tema</Typography>
+                <TextField value={tema.descricao} onChange={(e: ChangeEvent<HTMLInputElement>) => updatedTema(e)} id="descricao" label="descricao" variant="outlined" name="descricao" margin="normal" fullWidth />
+                <Button type="submit" variant="contained" color="primary">
+                    Finalizar
+                </Button>
+            </form>
+        </Container>
+    )
+}
+
+export default CadastroTema;
